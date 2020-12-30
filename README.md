@@ -80,30 +80,29 @@ class Home {
   /**
    * 自动生成 <view wx:for="{{todoList}}" />
    */
-  @list.view('todo-list')
+  @view('todo-list').forEach()
   public todoList!: User[]
 
   /** 自动生成 <input bind:change="handleInputToDoTitle">，并且自动修改 data.title */
+  @input('todo-input').change()
   @databind('title')
-  @input.change('todo-input')
   public handleInputToDoTitle() {}
 
   /** 自动生成 <button bind:tap="handleTapAddTodo"> */
-  @button.tap('add-todo')
+  @button('add-todo').tap()
   public handleTapAddTodo() {
     this.setData({ todoList: [...todoList, { title: this.data.title } ], title: '' })
   }
 
   /** 自动生成 wx:for 的 view 里面的 checkbox，并且自动修改元素的 done: true/false */
-  @checkbox.change('todo-list > check-todo')
+  @checkbox('todo-list > check-todo').change()
   @toggle('todoList[index].done')
   public handleToggleTodo() {}
 
   /** 自动生成 wx:for 的 view 里面的 <button>，并且删除点击的时候删除 todoList[index] */
-  @button.tap('todo-list > delete-todo')
+  @button('todo-list > delete-todo').tap()
   @remove('todoList[index]')
-  public handleDeleteTodo() {
-  }
+  public handleDeleteTodo() { }
 }
 ```
 
