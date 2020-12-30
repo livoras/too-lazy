@@ -124,6 +124,83 @@ class Home {
 
 如何在 **可以在生成的代码中添加结构和样式的同时，又要保证生成的元素和代码中配置的一致性** 是个大问题。
 
-我们定义生成元素的一致性：
-...
+如果可以随意修改生成的核心 HTML 代码，会导致一致性问题。设想可以加入修改限制：
 
+### 限制 1：生成的元素必须存在，不能删除
+你可以随意调整生成的 HTML 元素的位置，但是不能删除它。
+
+### 限制 2: 如果配置定义了层次结构，必须保持嵌套关系的不变
+
+例如，文本属性插入必须在原来的父节点、循环模板内部元素结构和父元素保持层级关系（嵌套深度的可以变化，嵌套关系不能发生改变）。举个例子：
+
+```typescript
+class Page {
+  @h1('head').text()
+  public title: string
+
+  @div('user').forEach()
+  public users: User[]
+
+  @button('user > remove-user').click()
+  public handleClickRemoveUser(): void {}
+}
+```
+
+会生成 HTML 结构：
+
+```html
+<h1 head>{{head.text(title)}}</h1>
+<div user forEach="users">
+  <button remove-user onClick="handleClickRemoveUser"></button>
+</div>
+```
+
+生成的核心元素的抽象嵌套结构是：
+
+```html
+  * head -> head.text
+  * user -> remove-user
+```
+
+这时候这么去改 HTML 结构是合法的：
+
+```html
+<div user forEach="users">
+  <div>
+    <span>{{user.name}}</span>
+    <button remove-user onClick="handleClickRemoveUser"></button>
+  </div>
+</div>
+<h1 head>
+  <div class="red"> {{head.text(title)}} </div>
+</h1>
+```
+
+因为它们的嵌套结构没有发生改变：`head.text` 还在 `head` 里面，`remove-user` 还在 `user` 里面。
+
+```html
+  * user -> remove-user
+  * head -> head.text
+```
+
+但是如果这么去改：
+
+```html
+<div user forEach="users">
+</div>
+<button remove-user onClick="handleClickRemoveUser"></button>
+```
+
+是不合法的，因为这样的嵌套结构就变成了：
+
+```html
+  * user
+  * remove-user
+```
+
+有两个问题：
+
+1. 把 head 元素删除了
+2. 原来 remove-user 是在 user 下面的，现在被搞出来了。嵌套关系发生了改变。
+
+这时候应该报错，因为已经产生了和原有代码配置中的抽象嵌套结构不一致的情况。
