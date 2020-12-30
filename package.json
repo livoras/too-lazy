@@ -1,0 +1,25 @@
+{
+  "name": "too-lazy",
+  "version": "1.0.0",
+  "description": "Too Lazy Too Write Markup Language.",
+  "main": "a.js",
+  "dependencies": {},
+  "devDependencies": {
+    "esbuild": "^0.8.27",
+    "nodemon": "^2.0.6"
+  },
+  "scripts": {
+    "watch": "nodemon -w src/**/* -e ts --exec 'esbuild src/index.ts --bundle --outfile=build/index.js'",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/livoras/too-lazy.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/livoras/too-lazy/issues"
+  },
+  "homepage": "https://github.com/livoras/too-lazy#readme"
+}

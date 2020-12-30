@@ -1,11 +1,8 @@
-# too-lazy
-Too Lazy Too Write Markup Language.
-
-```typescript
 
 class Home {
   public onLoad(): void {
   }
+
   ///////////////// 中间程序会根据以下的配置生成 wxml 并且绑定事件 ///////////////////////////
   /**
    * 自动生成 <view wx:for="{{todoList}}" />
@@ -35,4 +32,3 @@ class Home {
   public handleDeleteTodo() {
   }
 }
-```
