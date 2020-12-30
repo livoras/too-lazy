@@ -3,6 +3,7 @@ Too Lazy Too Write Markup Language.
 
 ```typescript
 
+@autoMarkup()
 class Home {
   public onLoad(): void {
   }
